@@ -5,7 +5,7 @@ import { UserService } from "src/user/user.service";
 import { Message } from "src/user/entities/message.entity";
 import { forwardRef, Inject } from "@nestjs/common";
 @WebSocketGateway()
-export class ChatGateway implements OnGatewayConnection {
+export class ChatGateway implements OnGatewayConnection ,OnGatewayDisconnect {
   constructor(private chatsService: ChatsService,
     
     @Inject(forwardRef(() => UserService))
@@ -14,6 +14,9 @@ export class ChatGateway implements OnGatewayConnection {
   server: Server;
   async handleConnection(socket: Socket) {
     await this.chatsService.getUserFromSocket(socket)
+  }
+  handleDisconnect(client: any) {
+    console.log('Client disconnected:', client.id);
   }
   @SubscribeMessage('send_message')
   async listenForMessages(@MessageBody() message: string,@ConnectedSocket() socket: Socket) {
