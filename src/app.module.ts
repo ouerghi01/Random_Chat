@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { Token } from './user/entities/token.entity';
+import { ChatsModule } from './chats/chats.module';
+import { Message } from './user/entities/message.entity';
 
 @Module({
   imports: [
@@ -15,12 +18,13 @@ import { AuthModule } from './auth/auth.module';
       password: 'postgres',
       username: 'postgres',
       database: 'postgres',
-      entities: [User],
+      entities: [User,Token,Message],
       synchronize: true,
       logging: true,
     }),
     UserModule,
     AuthModule,
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
